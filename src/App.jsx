@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useRef } from 'react'
 import './App.css'
 
 const letters = "abcdefghijklmnopqrstuvwxyz";
@@ -7,12 +7,14 @@ const symbols = "!@#$%^&*()-_=+[]{}|;:'\",.<>?/`~";
 
 function App() {
   // campi controllati
-  const [fullName, setFullName] = useState('')
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [specialization, setSpecialization] = useState('')
-  const [experience, setExperience] = useState('')
   const [description, setDescription] = useState('')
+
+  //campi non controllati
+  const fullNameRef = useRef();
+  const specializationRef = useRef();
+  const experienceRef = useRef()
 
   const isUsernameValid = useMemo(() => {
     const charsValid = username.split("").every(char =>
@@ -38,6 +40,12 @@ function App() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    //valori non controllati
+    const fullName = fullNameRef.current.value;
+    const specialization = specializationRef.current.value;
+    const experience = experienceRef.current.value;
+
     if (
       !fullName.trim() ||
       !username.trim() ||
@@ -74,8 +82,7 @@ function App() {
               <label>Nome completo:</label>
               <input
                 type="text"
-                value={fullName}
-                onChange={e => setFullName(e.target.value)}
+                ref={fullNameRef}
               />
             </div>
 
@@ -110,8 +117,7 @@ function App() {
             <div className="form-group">
               <label>Specializzazione:</label>
               <select
-                value={specialization}
-                onChange={e => setSpecialization(e.target.value)}
+                ref={specializationRef}
               >
                 <option value="">-- Seleziona --</option>
                 <option value="Full Stack">Full Stack</option>
@@ -124,9 +130,7 @@ function App() {
               <label>Anni di esperienza:</label>
               <input
                 type="number"
-                value={experience}
-                onChange={e => setExperience(e.target.value)}
-                min="0"
+                ref={experienceRef}
               />
             </div>
 
